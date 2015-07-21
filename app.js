@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var fan = require('./routes/fan');
+var filterclogged = require('./routes/filterclogged');
+var heating = require('./routes/heating');
+var overheated = require('./routes/overheated');
 
 var app = express();
 
@@ -24,6 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/fan', fan);
+app.use('/heating', heating);
+app.use('/filterclogged', filterclogged);
+app.use('/overheated', overheated);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

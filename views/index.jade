@@ -1,5 +1,43 @@
+
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    br
+
+    // Wrapper
+    #wrapper
+
+        // SYSTEM INFO
+        #systemInfo
+            h2 System Info
+            p
+                strong Fan Speed:
+                |  <span id='fanSpeed'></span>
+                br
+                strong Heating:
+                |  <span id='heating'></span>
+                br
+                strong Filter:
+                |  <span id='filterClogged'></span>
+                br
+                strong Overheated:
+                |  <span id='overHeated'></span>
+        // /SYSTEM INFO
+
+        // FAN SPEED
+        h2 Fan Speed
+        #controls
+            button#btnHighSpeed High
+            button#btnNormalSpeed Normal
+            button#btnLowSpeed Low
+        // /FAN SPEED
+
+        // HEATING
+        h2 Heating
+        #controls
+            button#btnHeatingOff Off
+            button#btnHeatingOn  On
+        // /HEATING
+
+    // /WRAPPER
