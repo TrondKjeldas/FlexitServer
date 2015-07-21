@@ -67,7 +67,7 @@ class FlexitInterface
 
           setTimeout(
             () =>
-              @serialPort.write("SUBSCRIBE CHANGES ON\r",
+              @serialPort.write("SUBSCRIBE CHANGES ON\r\n",
                 (err, results) =>
                   console.log('err ' + err)
                   console.log('results ' + results)
@@ -77,8 +77,34 @@ class FlexitInterface
           )
       )
 
+    handleResult: (err, results) =>
+      console.log('err ' + err)
+      console.log('results ' + results)
+
     updateOutputs: ->
-      console.log "TODO: update outputs"
+
+      if @H2
+        @serialPort.write("SET RO 8 1\r\n", @handleResult)
+      else
+        @serialPort.write("SET RO 8 0\r\n", @handleResult)
+      setTimeout(
+        () =>
+          if @H3
+            @serialPort.write("SET RO 9 1\r\n", @handleResult)
+          else
+            @serialPort.write("SET RO 9 0\r\n", @handleResult)
+
+        1000
+      )
+      setTimeout(
+        () =>
+          if @EV
+            @serialPort.write("SET RO 10 1\r\n", @handleResult)
+          else
+            @serialPort.write("SET RO 10 0\r\n", @handleResult)
+
+        2000
+      )
 
     fanspeed: ->
       if @H2
