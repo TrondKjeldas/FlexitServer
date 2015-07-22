@@ -42,7 +42,7 @@ function setSpeed(speed) {
   // Use AJAX to post the object to our adduser service
   $.ajax({
     type: 'POST',
-    data: {speed},
+    data: {'speed' : speed},
     url: '/fan/speed',
     dataType: 'JSON'
   }).done(function(response) {
@@ -74,7 +74,7 @@ function setHeating(state) {
   // Use AJAX to post the object to our adduser service
   $.ajax({
     type: 'POST',
-    data: {state},
+    data: {'state' : state},
     url: '/heating',
     dataType: 'JSON'
   }).done(function(response) {
