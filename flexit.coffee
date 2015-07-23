@@ -13,98 +13,96 @@ class FlexitInterface
   class FlexitInterfaceImplementation
 
     constructor: () ->
-      # body...
+
+      # Current values
       @H2 = off
       @H3 = off
       @EV = off
       @FI = off
       @BT = off
 
-      @serialPort = new serialport.SerialPort("/dev/ttyACM0",
-      {
-        baudrate: 9600,
-        parser: serialport.parsers.readline("\n")
-      })
+      serialport.list( (err, ports) =>
+        console.log "Available ports:"
+        for port in ports
+          console.log('   ' + port.comName)
+        portToUse = ports[0].comName
+        console.log "Using port: " + portToUse
+        @serialPort = new serialport.SerialPort(portToUse,
+            {
+              baudrate: 9600,
+              parser: serialport.parsers.readline("\n")
+            }
+        )
 
-      @serialPort.on("open",
-        () =>
-          console.log('open')
+        @serialPort.on("open",
+          () =>
+            console.log ('Port ' + portToUse + ' opened')
 
-          @serialPort.on('data', (data) =>
-            if data.indexOf("D") > -1
-              console.log('data received: ' + data)
+            @serialPort.on('data', (data) =>
+              if data.indexOf("D") == 0 or data.indexOf("R") == 0
+                console.log('data received: ' + data)
 
-            if(data.indexOf("DO 8") > -1)
-              if data[5] == "0"
-                @H2 = off
-              else
-                @H2 = on
+              if(data.indexOf("RO 8") > -1)
+                if data[5] == "0"
+                  @H2 = off
+                else
+                  @H2 = on
 
-            if(data.indexOf("DO 9") > -1)
-              if data[5] == "0"
-                @H3 = off
-              else
-                @H3 = on
+              if(data.indexOf("RO 9") > -1)
+                if data[5] == "0"
+                  @H3 = off
+                else
+                  @H3 = on
 
-            if(data.indexOf("DO 10") > -1)
-              if data[5] == "0"
-                @EV = off
-              else
-                @EV = on
+              if(data.indexOf("RO 10") > -1)
+                if data[5] == "0"
+                  @EV = off
+                else
+                  @EV = on
 
-            if(data.indexOf("DI 2") > -1)
-              if data[5] == "0"
-                @FI = off
-              else
-                @FI = on
+              if(data.indexOf("DI 2") > -1)
+                if data[5] == "0"
+                  @FI = off
+                else
+                  @FI = on
 
-            if(data.indexOf("DI 3") > -1)
-              if data[5] == "0"
-                @BT = off
-              else
-                @BT = on
-          )
+              if(data.indexOf("DI 3") > -1)
+                if data[5] == "0"
+                  @BT = off
+                else
+                  @BT = on
+            )
 
-          setTimeout(
-            () =>
-              @serialPort.write("SUBSCRIBE CHANGES ON\r\n",
-                (err, results) =>
-                  console.log('err ' + err)
-                  console.log('results ' + results)
-              )
+            setTimeout(
+              () =>
+                @serialPort.write("SUBSCRIBE CHANGES ON\r\n",
+                  (err, results) =>
+                    if err
+                      console.log('err ' + err)
+                      console.log('results ' + results)
+                )
 
-            3000
-          )
+              3000
+            )
+        )
       )
 
-    handleResult: (err, results) =>
-      console.log('err ' + err)
-      console.log('results ' + results)
+    writeToSerialPort: (string) ->
+      console.log ("Writing: " + string)
+      @serialPort.write(string, (err, results) =>
+        if err
+          console.log('err ' + err)
+          console.log('results ' + results)
+      )
+
+    writeVal: (string, val) ->
+      c = if val then "1" else "0"
+      @writeToSerialPort(string + " " + c + "\r\n")
 
     updateOutputs: ->
-
-      if @H2
-        @serialPort.write("SET RO 8 1\r\n", @handleResult)
-      else
-        @serialPort.write("SET RO 8 0\r\n", @handleResult)
-      setTimeout(
-        () =>
-          if @H3
-            @serialPort.write("SET RO 9 1\r\n", @handleResult)
-          else
-            @serialPort.write("SET RO 9 0\r\n", @handleResult)
-
-        1000
-      )
-      setTimeout(
-        () =>
-          if @EV
-            @serialPort.write("SET RO 10 1\r\n", @handleResult)
-          else
-            @serialPort.write("SET RO 10 0\r\n", @handleResult)
-
-        2000
-      )
+      @writeVal("SET RO 8", @H2)
+      @writeVal("SET RO 9", @H3)
+      @writeVal("SET RO 10", @EV)
 
     fanspeed: ->
       if @H2
