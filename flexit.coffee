@@ -14,12 +14,15 @@ class FlexitInterface
 
     constructor: () ->
 
-      # Current values
+      # Outputs
       @H2 = off
       @H3 = off
       @EV = off
+
+      # Inputs
       @FI = off
       @BT = off
+      @DR = off
 
       serialport.list( (err, ports) =>
         console.log "Available ports:"
@@ -55,7 +58,7 @@ class FlexitInterface
                   @H3 = on
 
               if(data.indexOf("RO 10") > -1)
-                if data[5] == "0"
+                if data[6] == "0"
                   @EV = off
                 else
                   @EV = on
@@ -71,6 +74,12 @@ class FlexitInterface
                   @BT = off
                 else
                   @BT = on
+
+              if(data.indexOf("DI 4") > -1)
+                if data[5] == "0"
+                  @DR = off
+                else
+                  @DR = on
             )
 
             setTimeout(
@@ -134,3 +143,5 @@ class FlexitInterface
     filterclogged: -> return @FI
 
     overheated: -> return @BT
+
+    operational: -> return @DR

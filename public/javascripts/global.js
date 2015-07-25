@@ -32,6 +32,10 @@ function getSystemState() {
   $.getJSON('/overheated', function(data) {
     $('#overHeated').text(data?"yes":"no");
   });
+
+  $.getJSON('/operational', function(data) {
+    $('#operational').text(data?"yes":"no");
+  });
 };
 
 

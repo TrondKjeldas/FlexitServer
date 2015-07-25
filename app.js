@@ -11,6 +11,7 @@ var fan = require('./routes/fan');
 var filterclogged = require('./routes/filterclogged');
 var heating = require('./routes/heating');
 var overheated = require('./routes/overheated');
+var operational = require('./routes/operational');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use('/fan', fan);
 app.use('/heating', heating);
 app.use('/filterclogged', filterclogged);
 app.use('/overheated', overheated);
+app.use('/operational', operational);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
