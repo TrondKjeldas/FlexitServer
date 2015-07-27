@@ -2,6 +2,8 @@
 
 Small "REST-like" web-server interface to a Flexit air handling unit
 
+Command to start application: npm start
+
 ## Hardware:
 
 The Flexit unit is interfaced via an Arduino UNO with an IO shield,
