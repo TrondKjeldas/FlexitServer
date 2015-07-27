@@ -13,6 +13,8 @@ Documentation for the Flexit interface card: [SP425](http://www.flexit.no/produk
 
 ## Docker:
 
+(Useless, but just for kicks)
+
 Build cmd: sudo docker build -t flexi-server . 
 
 Run cmd: sudo docker run --device /dev/ttyACM0 --rm --net=host flexi-server
