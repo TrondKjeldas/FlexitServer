@@ -24,10 +24,14 @@ class FlexitInterface
       @BT = off
       @DR = off
 
+      @serialPort = null
+
       serialport.list( (err, ports) =>
         console.log "Available ports:"
         for port in ports
           console.log('   ' + port.comName)
+        if ports.length < 1
+          return
         portToUse = ports[0].comName
         console.log "Using port: " + portToUse
         @serialPort = new serialport.SerialPort(portToUse,
@@ -95,6 +99,10 @@ class FlexitInterface
             )
         )
       )
+
+    close: ->
+      @serialPort?.close()
+      console.log "port closed."
 
     writeToSerialPort: (string) ->
       console.log ("Writing: " + string)

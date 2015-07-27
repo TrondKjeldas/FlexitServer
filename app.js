@@ -13,6 +13,15 @@ var heating = require('./routes/heating');
 var overheated = require('./routes/overheated');
 var operational = require('./routes/operational');
 
+require('coffee-script/register')
+var FlexitInterface = require('./flexit')
+
+process.on('SIGINT', function() {
+  FlexitInterface.get().close();
+  console.log("Quitting!");
+  process.exit(1);
+});
+
 var app = express();
 
 // view engine setup
