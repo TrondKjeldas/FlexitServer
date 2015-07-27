@@ -51,9 +51,9 @@ class FlexitInterface
 
               if(data.indexOf("RO 8") > -1)
                 if data[5] == "0"
-                  @H2 = off
-                else
                   @H2 = on
+                else
+                  @H2 = off
 
               if(data.indexOf("RO 9") > -1)
                 if data[5] == "0"
@@ -69,21 +69,21 @@ class FlexitInterface
 
               if(data.indexOf("DI 2") > -1)
                 if data[5] == "0"
-                  @FI = off
-                else
                   @FI = on
+                else
+                  @FI = off
 
               if(data.indexOf("DI 3") > -1)
                 if data[5] == "0"
-                  @BT = off
-                else
                   @BT = on
+                else
+                  @BT = off
 
               if(data.indexOf("DI 4") > -1)
                 if data[5] == "0"
-                  @DR = off
-                else
                   @DR = on
+                else
+                  @DR = off
             )
 
             setTimeout(
@@ -122,22 +122,22 @@ class FlexitInterface
       @writeVal("SET RO 10", @EV)
 
     fanspeed: ->
-      if @H2
-        return 2
-      else if @H3
-        return 3
-      else
+      if @H2 and not @H3
         return 1
+      else if @H3 and @H2
+        return 3
+      else if not @H2 and not @H3
+        return 2
 
     setfanspeed: (speed) ->
       if speed == 2
-        @H2 = on
+        @H2 = off
         @H3 = off
       else if speed == 3
         @H3 = on
-        @H2 = off
+        @H2 = on
       else
-        @H2 = off
+        @H2 = on
         @H3 = off
 
       @updateOutputs()
