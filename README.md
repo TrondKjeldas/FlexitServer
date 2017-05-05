@@ -11,7 +11,7 @@ and running the [ArduinoIO](https://github.com/TrondKjeldas/ArduinoIO.git) sketc
 
 Documentation for the Flexit interface card: [SP425](http://www.flexit.no/produkter/luftbehandlingsaggregater/Tilbehor-kanalsystem/Tilbehor/SP425-Styringskort-for-sentralstyring-SD/)
 
-![Picture of the HW involved](Flexit SP425 and Welleman KA05.png)
+![Picture of the HW involved](Flexit%20SP425%20and%20Welleman%20KA05.png)
 
 ## Docker:
 
