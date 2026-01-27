@@ -1,4 +1,4 @@
-require('coffee-script/register')
+require('coffeescript/register')
 var FlexitInterface = require('../flexit')
 
 var express = require('express');
