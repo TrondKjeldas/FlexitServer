@@ -1,4 +1,5 @@
-serialport = require("serialport");
+{ SerialPort } = require("serialport")
+{ ReadlineParser } = require("@serialport/parser-readline")
 
 module.exports =
 class FlexitInterface
@@ -26,26 +27,26 @@ class FlexitInterface
 
       @serialPort = null
 
-      serialport.list( (err, ports) =>
+      SerialPort.list().then((ports) =>
         console.log "Available ports:"
         for port in ports
-          console.log('   ' + port.comName)
+          console.log('   ' + port.path)
         if ports.length < 1
           return
-        portToUse = ports[0].comName
+        portToUse = ports[1].path
         console.log "Using port: " + portToUse
-        @serialPort = new serialport.SerialPort(portToUse,
-            {
-              baudrate: 9600,
-              parser: serialport.parsers.readline("\n")
-            }
-        )
+        @serialPort = new SerialPort({
+          path: portToUse,
+          baudRate: 9600
+        })
+
+        parser = @serialPort.pipe(new ReadlineParser({ delimiter: "\n" }))
 
         @serialPort.on("open",
           () =>
             console.log ('Port ' + portToUse + ' opened')
 
-            @serialPort.on('data', (data) =>
+            parser.on('data', (data) =>
               if data.indexOf("D") == 0 or data.indexOf("R") == 0
                 console.log('data received: ' + data)
 
@@ -98,6 +99,9 @@ class FlexitInterface
               3000
             )
         )
+      ).catch((err) =>
+        console.error('Error listing serial ports:', err.message)
+        console.log('Serial port initialization will be retried on next connection attempt')
       )
 
     close: ->
